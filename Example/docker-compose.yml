@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+
+  3dtiles-server:
+    build:
+      context: ../3dtiles-server-context
+      args:
+        TILESET_SOURCE: ${TILESET_SOURCE}
+        TILESET_SERVER_PORT: ${TILESET_SERVER_PORT}
+    ports:
+      - ${TILESET_SERVER_PORT}:${TILESET_SERVER_PORT}
