@@ -1,0 +1,42 @@
+os: linux
+dist: focal
+language: generic
+services:
+  - docker
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.29.2
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+jobs:
+  include:
+    - stage: Building and running the 3DTiles-Server container
+      script:
+        - docker build -t vcity:3DTiles-Server 3dtiles-server-context
+        - travis_wait 2 docker run -t vcity:3DTiles-Server
+    - stage: Building and running with docker-compose
+      script:
+        - |
+          cd Example
+          docker-compose build
+          docker-compose up -d
+          travis_wait 2
+          docker-compose down
+    - stage: "Markdown link checks"
+      language: node_js
+      node_js: 12
+      script:
+        - npm install --global remark-cli remark-validate-links
+        - remark -u validate-links .
+        - |
+          export FAILURE_THRESHOLD=0
+          export warnings=`remark -u validate-links . 2>&1 | grep warning | grep "Link to unknown" | wc -l`
+          if [ $warnings -gt $FAILURE_THRESHOLD ]; then
+            exit 1;
+          fi
+
