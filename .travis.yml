@@ -18,7 +18,9 @@ jobs:
     - stage: Building and running the 3DTiles-Server container
       script:
         - docker build -t vcity:3DTiles-Server 3dtiles-server-context
-        - travis_wait 2 docker run -t vcity:3DTiles-Server
+        - docker run --rm --detach -t vcity:3DTiles-Server
+        - travis_wait 2 
+        - docker stop $(docker ps -a -q --filter ancestor=vcity:3DTiles-Server --format="{{.ID}}")
     - stage: Building and running with docker-compose
       script:
         - |
