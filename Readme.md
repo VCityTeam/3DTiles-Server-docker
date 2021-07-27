@@ -9,7 +9,7 @@ This repository offers the containerized version of [3d-tiles-samples](https://g
 
 ## Building and running the container with docker
 
-Use the [Dockerfile](Dockerfile) provided within the 3dtiles-server-context directory e.g. with the commands
+Use the [Dockerfile](3dtiles-server-context/Dockerfile) provided within the 3dtiles-server-context directory e.g. with the commands
 
 ```bash
    docker build 3dtiles-server-context -t 3dtiles-server
