@@ -12,6 +12,8 @@ ARG TILESET_SERVER_PORT=8996
 ENV TILESET_SERVER_PORT=${TILESET_SERVER_PORT}
 
 RUN git clone https://github.com/AnalyticalGraphicsInc/3d-tiles-samples
+WORKDIR /3d-tiles-samples
+RUN git reset --hard 1901e7ed563c6efc59888237ca56807a759e269f
 
 # Import an example of 3DTiles embedding some IFC geometry
 WORKDIR /3d-tiles-samples/tilesets/
